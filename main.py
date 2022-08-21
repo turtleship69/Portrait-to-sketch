@@ -12,12 +12,3 @@ def sketcher(input):
     return pencil_sketch_IMG
 
     
-#Show the original image
-#cv2.imshow('Original Image', cv2.imread("nell.jpg"))
-#Show the new image pencil sketch
-
-sketch = sketcher("nell.jpg")
-#cv2.imshow('Pencil Sketch', sketch)
-#cv2.waitKey(0)
-cv2.imwrite('sketch 2.png', sketch)
-#Display the window infinitely until any keypress
