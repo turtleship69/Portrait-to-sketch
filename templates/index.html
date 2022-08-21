@@ -1,0 +1,33 @@
+<!--form to ask people to attach image then send post request containg image to /sketch-->
+<html>
+<head>
+    <title>Sketch</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+        .container {
+            width: 500px;
+            margin: 0 auto;
+        }
+        .btn {
+            margin-top: 20px;
+        }
+        .img-container {
+            margin-top: 20px;
+        }
+        .img-container img {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Sketch</h1>
+    <form action="/sketch" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="image">Image</label>
+            <input type="file" class="form-control" id="image" name="image">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</body>
+</html>

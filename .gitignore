@@ -2,3 +2,7 @@ nell.jpg
 sketch 2.png
 poetry.lock
 pyproject.toml
+# exclude everything
+content/*
+# exception to the rule
+!content/.gitkeep 
