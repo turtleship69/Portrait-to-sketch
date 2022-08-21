@@ -1,8 +1,7 @@
 import cv2, uuid
-from flask import Flask, render_template, send_file, request, redirect, make_response, session
+from flask import Flask, render_template, send_file, request, redirect, session
 from os import urandom, path, remove, listdir
 
- 
 dir = 'content'
 for f in listdir(dir):
     remove(path.join(dir, f))
@@ -10,24 +9,29 @@ for f in listdir(dir):
 with open('content/.gitkeep', 'w') as f:
     f.write('')
 
+
 def sketcher(input):
     img = cv2.imread(input)
-    gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
+    gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     inverted_gray_image = 255 - gray_image
-    blurred_img = cv2.GaussianBlur(inverted_gray_image, (21,21),0) 
+    blurred_img = cv2.GaussianBlur(inverted_gray_image, (21, 21), 0)
     inverted_blurred_img = 255 - blurred_img
-    pencil_sketch_IMG = cv2.divide(gray_image, inverted_blurred_img, scale = 256.0)
+    pencil_sketch_IMG = cv2.divide(gray_image,
+                                   inverted_blurred_img,
+                                   scale=256.0)
     return pencil_sketch_IMG
+
 
 app = Flask(__name__)
 app.secret_key = urandom(24)
+
 
 @app.route('/')
 def index():
     """assign a random session id to the user"""
     session['id'] = uuid.uuid4()
     return render_template('index.html')
-    
+
 
 @app.route('/sketch', methods=['GET', 'POST'])
 def sketch():
