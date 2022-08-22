@@ -1,6 +1,6 @@
-import cv2, base64
+import cv2
 from flask import Flask, render_template, send_file, request, redirect
-from os import urandom, path, remove, listdir
+from os import urandom
 import numpy as np
 from io import BytesIO
 
@@ -38,8 +38,6 @@ def index():
 def sketch():
     """take picture from post request, convert to sketch and return file in png form with mine types"""
     if request.method == 'POST':
-        #save session id to variable
-        id = random_string(24)
         #convert image to sketch from request.files['image']
         sketched_image = sketcher(request.files['image'].stream)
         #convert sketch to image that can be returned to browser
