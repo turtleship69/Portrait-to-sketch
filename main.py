@@ -39,15 +39,13 @@ def sketch():
     """take picture from post request, convert to sketch and return file in png form with mine types"""
     if request.method == 'POST':
         #save session id to variable
-        id = session['id']
-        #save file with random session id
-        file = request.files['image']
-        file.save(f'content/{id}.png')
-        #convert image to sketch
-        sketched_image = sketcher(f'content/{id}.png')
-        cv2.imwrite(f'content/{id}_sketch.png', sketched_image)
-        #return sketch
-        return send_file(f'content/{id}_sketch.png', mimetype='image/png')
+        id = random_string(24)
+        #convert image to sketch from request.files['image']
+        sketched_image = sketcher(request.files['image'].stream)
+        #convert sketch to image that can be returned to browser
+        sketched_image = cv2.imencode('.png', sketched_image)[1].tostring()
+        #return sketch to browser
+        return send_file(BytesIO(sketched_image), mimetype='image/png')
     else:
         return redirect('/')
 
