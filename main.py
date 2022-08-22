@@ -1,17 +1,12 @@
-import cv2, uuid
-from flask import Flask, render_template, send_file, request, redirect, session
+import cv2, base64
+from flask import Flask, render_template, send_file, request, redirect
 from os import urandom, path, remove, listdir
-
-dir = 'content'
-for f in listdir(dir):
-    remove(path.join(dir, f))
-#create empty .gitkeep file to prevent empty folder from being pushed to github
-with open('content/.gitkeep', 'w') as f:
-    f.write('')
+import numpy as np
+from io import BytesIO
 
 
 def sketcher(input):
-    img = cv2.imread(input)
+    img = get_opencv_img_from_buffer(input, cv2.IMREAD_COLOR)
     gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     inverted_gray_image = 255 - gray_image
     blurred_img = cv2.GaussianBlur(inverted_gray_image, (21, 21), 0)
@@ -19,18 +14,23 @@ def sketcher(input):
     pencil_sketch_IMG = cv2.divide(gray_image,
                                    inverted_blurred_img,
                                    scale=256.0)
-    returnencil_sketch_IMG
+    #source: https://python.plainenglish.io/convert-a-photo-to-pencil-sketch-using-python-in-12-lines-of-code-4346426256d4e
+    return pencil_sketch_IMG
 
+def get_opencv_img_from_buffer(buffer, flags):
+    bytes_as_np_array = np.frombuffer(buffer.read(), dtype=np.uint8)
+    return cv2.imdecode(bytes_as_np_array, flags)
 
-app = Flask(__nam
-    #source: https://python.plainenglish.io/convert-a-photo-to-pencil-sketch-using-python-in-12-lines-of-code-4346426256d4e__)
+#generate random alphanumerical string 
+def random_string(length):
+    return urandom(length).hex()
+
+app = Flask(__name__)
 app.secret_key = urandom(24)
 
 
 @app.route('/')
 def index():
-    """assign a random session id to the user"""
-    session['id'] = uuid.uuid4()
     return render_template('index.html')
 
 
@@ -48,7 +48,6 @@ def sketch():
         return send_file(BytesIO(sketched_image), mimetype='image/png')
     else:
         return redirect('/')
-
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8080)
