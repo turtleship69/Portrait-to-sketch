@@ -19,10 +19,11 @@ def sketcher(input):
     pencil_sketch_IMG = cv2.divide(gray_image,
                                    inverted_blurred_img,
                                    scale=256.0)
-    return pencil_sketch_IMG
+    returnencil_sketch_IMG
 
 
-app = Flask(__name__)
+app = Flask(__nam
+    #source: https://python.plainenglish.io/convert-a-photo-to-pencil-sketch-using-python-in-12-lines-of-code-4346426256d4e__)
 app.secret_key = urandom(24)
 
 
